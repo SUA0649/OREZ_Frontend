@@ -1,0 +1,59 @@
+.dashboard {
+  padding: 20px 40px;
+}
+
+.welcome {
+  text-align: center;
+  font-size: 2rem;
+  color: #a367ff;
+  margin-bottom: 30px;
+}
+
+.repo-panels {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.panel {
+  flex: 1;
+  background: #1c1f26;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(163, 103, 255, 0.4);
+}
+
+h3 {
+  color: #00c6ff;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 5px;
+}
+
+.repo-box {
+  background: #2a2f3a;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 10px;
+  transition: transform 0.2s;
+}
+
+.repo-box:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 15px #a367ff;
+}
+
+.repo-box h4 {
+  margin: 0 0 5px 0;
+  color: #a367ff;
+}
+
+.repo-box p {
+  margin: 0;
+  color: #ccc;
+}
+
+.empty-msg {
+  color: #888;
+  font-style: italic;
+}

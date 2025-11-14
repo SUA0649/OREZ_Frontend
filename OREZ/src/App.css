@@ -1,42 +1,68 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+.auth-wrapper{display:flex;align-items:center;justify-content:center;height:100vh;padding:20px}
+.auth-card{width:980px;max-width:98%;background:linear-gradient(135deg, rgba(19,18,34,0.7), rgba(26,11,41,0.6));border-radius:16px;padding:26px;display:flex;gap:20px;align-items:center;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
+.brand{width:220px;text-align:center;padding:10px}
+.logo{width:72px;height:72px;margin:0 auto;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 8px 30px rgba(123,92,255,0.25)}
+.brand h1{margin:12px 0 6px;font-size:22px;color:#fff}
+.tag{color:var(--muted);font-size:12px}
+.auth-forms{flex:1;display:flex;align-items:center;gap:18px}
+.divider{color:var(--muted);font-weight:600}
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+.form{display:flex;flex-direction:column;gap:10px;width:100%}
+.form-title{margin:0 0 8px;color:var(--accent)}
+.err{background:#2a0b0b;padding:8px;border-radius:8px;color:#ffcccc}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
 
-.card {
-  padding: 2em;
-}
+.btn.primary{background:linear-gradient(90deg,var(--accent),#a48bff);color:#08101a;font-weight:700}
+.btn.accent{background:linear-gradient(90deg,#00c6ff,#6c63ff);color:#061018}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
 
-.read-the-docs {
-  color: #888;
+
+/* Dashboard */
+.dashboard{padding:28px;max-width:1200px;margin:18px auto}
+.dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.brand-xl{margin:0;color:var(--accent);font-size:24px}
+.subtitle{color:var(--muted);font-size:13px}
+.header-actions{display:flex;gap:10px}
+
+
+.create-row{display:flex;gap:10px;align-items:center;margin-bottom:18px}
+.panels{display:flex;gap:20px}
+.panel{flex:1;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;min-height:260px}
+.panel-title{margin:0 0 12px;color:var(--accent-2)}
+.empty{color:var(--muted)}
+.repo-card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:12px;border-radius:10px;margin-bottom:10px;position:relative;border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:transform .12s,box-shadow .12s}
+.repo-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(123,92,255,0.12)}
+.repo-title{font-weight:700;color:#fff}
+.repo-sub{color:var(--muted);font-size:13px}
+.tag{position:absolute;right:10px;top:10px;background:rgba(255,255,255,0.03);padding:4px 8px;border-radius:8px;font-size:12px;color:var(--muted)}
+.owner-tag{background:linear-gradient(90deg,var(--accent),#9a7bff);color:#07101a}
+
+
+/* Repo Page */
+.repo-page{max-width:1200px;margin:20px auto;padding:18px}
+.back{margin-bottom:12px}
+.repo-header{display:flex;align-items:center;gap:18px}
+.owner-badge{background:linear-gradient(90deg,var(--accent),#9a7bff);padding:6px 10px;border-radius:8px;color:#081018;font-weight:700}
+
+
+.repo-main{display:flex;gap:18px;margin-top:18px}
+.left-col{width:240px;background:#0f1116;padding:12px;border-radius:10px}
+.member-row{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03)}
+.perm{color:var(--muted);margin-left:6px}
+
+
+.editor-box{flex:1;background:#dedede20;border-radius:12px;min-height:300px;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.2)}
+.right-col{width:260px;background:#0f1116;padding:12px;border-radius:10px}
+.user-row{padding:8px;border-bottom:1px solid rgba(255,255,255,0.02);cursor:pointer}
+.user-row:hover{background:rgba(123,92,255,0.06)}
+
+
+/* small responsiveness */
+@media (max-width:900px){
+.auth-card{flex-direction:column}
+.auth-forms{flex-direction:column}
+.panels{flex-direction:column}
+.repo-main{flex-direction:column}
+.left-col,.right-col{width:100%}
 }
