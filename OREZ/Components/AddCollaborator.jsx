@@ -7,7 +7,7 @@ export default function AddCollaborator({ repoId, onAdded }) {
 
   const handleAdd = async () => {
     try {
-      await axios.post(`http://localhost:3001/api/repos/${repoId}/add-collaborator`, {
+      await axios.post(`http://localhost:3001/api/repos/${repoId}/collaborators`, {
         user_name: searchUser,
         permission
       });
