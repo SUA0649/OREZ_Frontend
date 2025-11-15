@@ -1,36 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { saveAs } from "file-saver";
+import FileTree from './FileTree';
+import FilePreviewModal from './FilePreviewModal';
 
-// Component to render folder hierarchy (folders first)
-function FileTree({ tree, onClickFolder }) {
-  // Separate folders and files
-  const folders = tree.filter((n) => n.mode === "tree");
-  const files = tree.filter((n) => n.mode !== "tree");
-
-  return (
-    <ul className="tree-list file-display">
-      {folders.map((node) => (
-        <li key={node.name} className="file-card">
-          <span
-            className="folder"
-            onClick={() => onClickFolder(node)}
-            style={{ cursor: "pointer" }}
-          >
-            📁 {node.name}
-          </span>
-        </li>
-      ))}
-      {files.map((node) => (
-        <li key={node.name} className="file-card">
-          <span className="file">
-            📄 {node.name} ({Math.round(node.blob?.size / 1024)} KB)
-          </span>
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 export default function RepoPage({ repo, user, onBack, onShowHistory}) {
   const [allUsers, setAllUsers] = useState([]);
@@ -44,6 +17,7 @@ export default function RepoPage({ repo, user, onBack, onShowHistory}) {
   const [dragActive, setDragActive] = useState(false);
   const [message, setMessage] = useState("");
   const [commits, setCommits] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const fetchUsersAndFiles = async () => {
     try {
@@ -276,7 +250,7 @@ export default function RepoPage({ repo, user, onBack, onShowHistory}) {
           onDragLeave={() => setDragActive(false)}
           onDrop={handleDrop}
         >
-          <FileTree tree={currentFiles} onClickFolder={openFolder} />
+          <FileTree tree={currentFiles} onClickFolder={openFolder}onClickFile={(node) => setSelectedFile({...node.blob, name: node.name})} />
           <div className="commit-box" style={{ padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: "8px", margin: "10px" }}>
               <input
                 className="field"
@@ -331,11 +305,19 @@ export default function RepoPage({ repo, user, onBack, onShowHistory}) {
       </div>
 
       {error && <div className="err">{error}</div>}
+
+      {selectedFile && (
+        <FilePreviewModal
+          repoId={repo.repo_id}
+          blob={selectedFile}
+          onClose={() => setSelectedFile(null)}/>
+      )}
     </div>
+
   );
 }
 
-// Helper to recursively read dropped directories
+
 async function readDirEntry(entry, path = "") {
   return new Promise((resolve) => {
     if (entry.isFile) {
