@@ -32,7 +32,7 @@ function FileTree({ tree, onClickFolder }) {
   );
 }
 
-export default function RepoPage({ repo, user, onBack }) {
+export default function RepoPage({ repo, user, onBack, onShowHistory}) {
   const [allUsers, setAllUsers] = useState([]);
   const [linked, setLinked] = useState([]);
   const [search, setSearch] = useState("");
@@ -42,6 +42,8 @@ export default function RepoPage({ repo, user, onBack }) {
   const [currentPath, setCurrentPath] = useState([]);
   const [currentTreeId, setCurrentTreeId] = useState(null);
   const [dragActive, setDragActive] = useState(false);
+  const [message, setMessage] = useState("");
+  const [commits, setCommits] = useState([]);
 
   const fetchUsersAndFiles = async () => {
     try {
@@ -115,6 +117,7 @@ export default function RepoPage({ repo, user, onBack }) {
 
     form.append("filePathsJson", JSON.stringify(relativePaths));
     form.append("uploaded_by", user.user_id);
+    form.append("message", message || "File upload");
 
     try {
       await axios.post(
@@ -232,13 +235,24 @@ export default function RepoPage({ repo, user, onBack }) {
             /{currentPath.join("/")}
           </span>
         </div>
-        <button
-          className="btn accent"
-          onClick={downloadRepoZip}
-          style={{ boxShadow: "0 4px 12px rgba(0,198,255,0.4)" }}
-        >
-          📥 Download ZIP
-        </button>
+
+        <div>
+          <button
+            className="btn ghost"
+            onClick={onShowHistory}
+            style={{ marginRight: '10px' }}
+          >
+            View History
+          </button>
+          <button
+            className="btn accent"
+            onClick={downloadRepoZip}
+            style={{ boxShadow: "0 4px 12px rgba(0,198,255,0.4)" }}
+          >
+            Download ZIP
+          </button>
+        </div>
+        
       </div>
 
       <div className="repo-main">
@@ -263,7 +277,15 @@ export default function RepoPage({ repo, user, onBack }) {
           onDrop={handleDrop}
         >
           <FileTree tree={currentFiles} onClickFolder={openFolder} />
-
+          <div className="commit-box" style={{ padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: "8px", margin: "10px" }}>
+              <input
+                className="field"
+                placeholder="Commit message (e.g., 'Uploaded new designs')"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                style={{ width: "100%" }}
+              />
+            </div>
           {/* Upload button below the box */}
           <label
             className="upload-btn"

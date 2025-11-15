@@ -3,11 +3,13 @@ import SignIn from '../Components/SignIn'
 import SignUp from '../Components/SignUp'
 import RepoDashboard from '../Components/RepoDashboard'
 import RepoPage from '../Components/RepoPage'
+import HistoryPage from '../Components/HistoryPage';
 
 export default function App(){
   const [user, setUser] = useState(null)
   const [selectedRepo, setSelectedRepo] = useState(null)
   const [authMode, setAuthMode] = useState("signin")
+  const [repoView, setRepoView] = useState("files");
 
   // --- AUTH SCREEN ---
   if(!user) {
@@ -40,16 +42,38 @@ export default function App(){
   }
 
   // --- REPO PAGE ---
-  if(selectedRepo) {
-    return <RepoPage repo={selectedRepo} user={user} onBack={() => setSelectedRepo(null)} />
+  if (selectedRepo) {
+    // If 'history' view, show HistoryPage
+    if (repoView === "history") {
+      return (
+        <HistoryPage
+          repo={selectedRepo}
+          user={user}
+          onBack={() => setRepoView("files")} 
+        />
+      );
+    }
+
+    // Otherwise, show the normal RepoPage
+    return (
+      <RepoPage
+        repo={selectedRepo}
+        user={user}
+        onBack={() => setSelectedRepo(null)}
+        onShowHistory={() => setRepoView("history")}
+      />
+    );
   }
 
   // --- DASHBOARD ---
   return (
-    <RepoDashboard 
-      user={user} 
-      onSelectRepo={setSelectedRepo} 
-      onSignOut={() => setUser(null)} 
+    <RepoDashboard
+      user={user}
+        onSelectRepo={(repo) => {
+          setSelectedRepo(repo);
+          setRepoView("files");
+        }}
+      onSignOut={() => setUser(null)}
     />
   )
 }
