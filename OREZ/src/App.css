@@ -1,5 +1,3 @@
-.auth-wrapper{display:flex;align-items:center;justify-content:center;height:100vh;padding:20px}
-.auth-card{width:980px;max-width:98%;background:linear-gradient(135deg, rgba(19,18,34,0.7), rgba(26,11,41,0.6));border-radius:16px;padding:26px;display:flex;gap:20px;align-items:center;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
 .brand{width:220px;text-align:center;padding:10px}
 .logo{width:72px;height:72px;margin:0 auto;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 8px 30px rgba(123,92,255,0.25)}
 .brand h1{margin:12px 0 6px;font-size:22px;color:#fff}
@@ -65,4 +63,71 @@
 .panels{flex-direction:column}
 .repo-main{flex-direction:column}
 .left-col,.right-col{width:100%}
+}
+
+.editor-box {
+  flex: 1;
+  background: #dedede20;
+  border-radius: 12px;
+  min-height: 300px;
+  padding: 20px;
+  position: relative;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.drag-active {
+  border: 2px dashed var(--accent);
+  background: rgba(123, 92, 255, 0.1);
+}
+
+.file-display {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.file-card {
+  padding: 10px;
+  margin-bottom: 8px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.file-name { font-weight: 700; }
+.file-meta { color: var(--muted); font-size: 12px; }
+
+.upload-btn {
+  margin-top: 15px;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  color: #081018;
+  padding: 12px;
+  text-align: center;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.upload-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
+}
+
+.tree-list {
+  list-style: none;
+  padding-left: 20px;
+}
+
+.tree-list li {
+  margin-bottom: 4px;
+}
+
+.folder {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.file {
+  margin-left: 12px;
 }

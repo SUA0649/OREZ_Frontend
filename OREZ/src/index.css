@@ -6,6 +6,7 @@
 --accent: #7b5cff;
 --accent-2: #00c6ff;
 }
+
 *{box-sizing:border-box}
 html,body,#root{height:100%}
 body{
