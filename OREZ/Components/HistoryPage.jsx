@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FileTree from './FileTree';
 import FilePreviewModal from './FilePreviewModal';
+import DiffModal from './DiffModal';
 
 export default function HistoryPage({ repo, user, onBack }) {
   const [commits, setCommits] = useState([]);
@@ -13,7 +14,7 @@ export default function HistoryPage({ repo, user, onBack }) {
   const [currentPath, setCurrentPath] = useState([]);
   const [selectedCommit, setSelectedCommit] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const [diffCommit, setDiffCommit] = useState(null);
   useEffect(() => {
     const fetchCommits = async () => {
       try {
@@ -149,6 +150,16 @@ export default function HistoryPage({ repo, user, onBack }) {
 
                 <td style={{ padding: '10px', textAlign: 'right' }}>
                     <button 
+                      className="btn ghost" 
+                      style={{ fontSize: '12px', padding: '5px 10px', border: '1px solid #00c6ff', color: '#00c6ff', marginRight: '5px' }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDiffCommit(commit.commit_id);
+                      }}
+                    >
+                      Compare
+                    </button>
+                    <button 
                     className="btn ghost" 
                     style={{ fontSize: '12px', padding: '5px 10px', border: '1px solid #555' }}
                     onClick={(e) => handleRollback(commit.commit_id, e)}
@@ -201,6 +212,13 @@ export default function HistoryPage({ repo, user, onBack }) {
             blob={selectedFile}
             onClose={() => setSelectedFile(null)}
             />
+        )}
+        {diffCommit && (
+          <DiffModal 
+            repoId={repo.repo_id} 
+            commitId={diffCommit} 
+            onClose={() => setDiffCommit(null)} 
+          />
         )}
     </div>
     );

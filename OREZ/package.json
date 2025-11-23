@@ -15,6 +15,7 @@
     "jszip": "^3.10.1",
     "jzip": "^1.0.0",
     "react": "^19.1.1",
+    "react-diff-viewer-continued": "^3.4.0",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
