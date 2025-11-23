@@ -1,165 +1,154 @@
-:root{
---bg-1: #0b0f1a;
---bg-2: #12131a;
---card: #11121a;
---muted: #9aa0b4;
---accent: #7b5cff;
---accent-2: #00c6ff;
+:root {
+  /* --- THEME COLORS --- */
+  --color-primary: #a367ff; /* Neon Purple */
+  --color-secondary: #00c6ff; /* Neon Blue */
+  --color-dark-bg: #111317; /* Deep Black/Blue */
+  --color-panel-bg: #1c1f26; /* Slightly lighter panel */
+  --color-text-light: #e6eef8;
+  --color-muted: #9aa0b4;
 }
 
-*{box-sizing:border-box}
-html,body,#root{height:100%}
-body{
-margin:0;
-font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-background: linear-gradient(180deg,var(--bg-1),var(--bg-2));
-color:#e6eef8;
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-dark-bg);
+  color: var(--color-text-light);
+  min-height: 100vh;
 }
 
+/* --- SHARED BUTTON STYLES --- */
+.btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 700; /* Bolder text */
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  text-decoration: none; /* Fix for links looking like buttons */
+}
 
-/* utility */
-.btn{cursor:pointer;border-radius:10px;padding:8px 12px;border:none}
-.field{background:#0e1116;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);color:#e6eef8}
-.small{width:220px}
+/* PRIMARY BUTTON (Sign In, Upload, etc.) */
+.btn.primary {
+  /* Use HEX codes directly to ensure gradient works */
+  background: linear-gradient(90deg, #00c6ff, #a367ff) !important;
+  color: #081018 !important; /* Black text for contrast against neon */
+  box-shadow: 0 0 15px rgba(0, 198, 255, 0.4);
+}
 
+.btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(163, 103, 255, 0.6);
+  filter: brightness(1.1);
+}
 
-/* simple animations */
-.glow{box-shadow:0 6px 20px rgba(123,92,255,0.12)}
+/* GHOST BUTTON (Cancel, Back, etc.) */
+.btn.ghost {
+  background: transparent !important;
+  border: 1px solid #00c6ff !important;
+  color: #00c6ff !important;
+}
 
-/* === AUTH PAGE WRAPPER === */
-.auth-container {
-  height: 100%;
+.btn.ghost:hover {
+  background: rgba(0, 198, 255, 0.1) !important;
+  box-shadow: 0 0 15px rgba(0, 198, 255, 0.3);
+  color: #fff !important;
+}
+
+/* CANCEL BUTTON */
+.btn.cancel {
+  background: #333 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+.btn.cancel:hover {
+  background: #444 !important;
+}
+
+/* --- INPUT FIELDS --- */
+.field {
+  background-color: #0e1116 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff !important;
+  padding: 12px 16px;
+  border-radius: 8px;
+  outline: none;
   width: 100%;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Ensures padding doesn't break width */
+}
+
+.field::placeholder {
+  color: #666;
+}
+
+.field:focus {
+  border-color: #a367ff;
+  box-shadow: 0 0 10px rgba(163, 103, 255, 0.3);
+  background-color: #15181e !important;
+}
+
+/* --- GLASS PANELS --- */
+.glass-panel {
+  background: #1c1f26 !important; /* Solid fallback for readability */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* --- AUTH CONTAINER (Login/Signup Background) --- */
+.auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #0f0f1f, #1a1a3a, #2b1b47);
-  background-size: 200% 200%;
-  animation: bgMove 8s ease-in-out infinite alternate;
+  min-height: 100vh;
+  width: 100vw;
+  background: radial-gradient(circle at center, #1c1f26 0%, #111317 100%);
 }
 
-/* === AUTH BOX === */
-.auth-box {
-  width: 400px;
-  padding: 50px 40px;
-  border-radius: 25px;
-  overflow: hidden;
-  background: rgba(20, 20, 40, 0.45);
-  backdrop-filter: blur(50px) saturate(150%);
-   box-shadow: 0 0 20px rgba(0,0,0,0.4),
-              inset 0 0 15px rgba(255,255,255,0.05);
-   display: flex;
-  flex-direction: column;
-  gap: 20px;
-  animation: fadeIn 0.7s ease;
+/* --- TAGS (Owner, etc.) --- */
+.tag {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
 }
 
-/* === Heading === */
-.auth-title {
+.owner-tag {
+  background: #a367ff !important;
+  color: #081018 !important;
+  box-shadow: 0 0 10px rgba(163, 103, 255, 0.5);
+  border: none;
+}
+
+.part-tag {
+  background: #00c6ff !important;
+  color: #081018 !important;
+  box-shadow: 0 0 10px rgba(0, 198, 255, 0.5);
+  border: none;
+}
+
+/* --- SCROLLBAR --- */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #a367ff; }
+
+/* --- ERROR MESSAGE --- */
+.err {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  color: #ffcccc;
+  padding: 10px;
+  border-radius: 8px;
   text-align: center;
-  color: #e6e6ff;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-shadow: 0 0 12px rgba(123, 92, 255, 0.7);
-}
-
-/* === Inputs === */
-.auth-input {
-  padding: 14px 18px;
-  border-radius: 12px;
-  border: none;
-  font-size: 16px;
-  color: #e6e6ff;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 0 12px rgba(0,0,0,0.3), 0 0 2px rgba(255,255,255,0.05);
-  outline: none;
-  transition: 0.3s;
-}
-
-.auth-input:focus {
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 15px rgba(123, 92, 255, 0.5), inset 0 0 15px rgba(0,0,0,0.4);
-  transform: scale(1.03);
-}
-
-/* === Error === */
-.auth-error {
-  color: #ff5c5c;
-  font-size: 14px;
-  text-align: center;
-  font-weight: 500;
-  text-shadow: 0 0 3px rgba(255, 0, 0, 0.5);
-}
-
-/* === Buttons === */
-.auth-btn {
-  padding: 14px;
-  border-radius: 14px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  background: linear-gradient(135deg, #6c63ff, #00c6ff);
-  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.6), 0 0 10px rgba(0,198,255,0.6);
-  transition: all 0.3s;
-}
-
-.auth-btn:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 30px rgba(108, 99, 255, 0.7), 0 0 15px rgba(0,198,255,0.7);
-}
-
-/* === Animations === */
-@keyframes fadeIn {
-  0% {opacity: 0; transform: translateY(-20px);}
-  100% {opacity: 1; transform: translateY(0);}
-}
-
-@keyframes bgMove {
-  0% {background-position: 0% 0%;}
-  100% {background-position: 100% 100%;}
-}
-
-/* === Responsive === */
-@media (max-width: 500px) {
-  .auth-box {
-    width: 90%;
-    padding: 40px 25px;
-  }
-}
-
-
-.auth-switcher {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.auth-switcher button {
-  padding: 8px 18px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 15px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #e6eef8;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-.auth-switcher button:hover {
-  background: rgba(123, 92, 255, 0.2);
-  transform: scale(1.05);
-}
-
-.auth-switcher button.active-switch {
-  background: linear-gradient(90deg, var(--accent-2), var(--accent));
-  color: #081018;
-  box-shadow: 0 6px 20px rgba(123,92,255,0.4);
-  transform: scale(1.05);
+  margin-bottom: 15px;
 }

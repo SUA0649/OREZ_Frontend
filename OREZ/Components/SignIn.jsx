@@ -18,20 +18,31 @@ export default function SignIn({ onSignIn }){
   }
 
   return (
-    <div className="auth-container">
-      <form className="auth-box" onSubmit={submit}>
-        <h2 className="auth-title">Sign In</h2>
+    <form 
+      className="glass-panel" 
+      onSubmit={submit}
+      style={{ padding:'40px', width:'350px', display:'flex', flexDirection:'column', gap:'20px' }}
+    >
+      <h2 style={{ textAlign:'center', color:'var(--color-text-light)', margin:0, fontSize:'1.8rem' }}>
+        Welcome Back
+      </h2>
+      <p style={{ textAlign:'center', color:'var(--color-muted)', margin:0, fontSize:'0.9rem' }}>
+        Enter your credentials to access OREZ
+      </p>
 
-        {error && <div className="auth-error">{error}</div>}
+      {error && <div className="err">{error}</div>}
 
-        <input className="auth-input" placeholder="Username" 
+      <div style={{display:'flex', flexDirection:'column', gap:'12px'}}>
+        <input className="field" placeholder="Username" 
                value={userName} onChange={e=>setUserName(e.target.value)} />
 
-        <input className="auth-input" type="password" placeholder="Password" 
+        <input className="field" type="password" placeholder="Password" 
                value={password} onChange={e=>setPassword(e.target.value)} />
+      </div>
 
-        <button className="auth-btn" type="submit">Sign In</button>
-      </form>
-    </div>
+      <button className="btn primary" type="submit" style={{marginTop:'10px', width:'100%'}}>
+        Sign In
+      </button>
+    </form>
   )
 }
