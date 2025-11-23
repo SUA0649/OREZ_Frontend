@@ -38,7 +38,8 @@ export default function FilePreviewModal({ repoId, blob, onClose }) {
           setContent(URL.createObjectURL(res.data));
         } else if (isPdf) {
           setType('pdf');
-          setContent(URL.createObjectURL(res.data));
+          const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
+          setContent(URL.createObjectURL(pdfBlob));
         } else {
           setType('text');
           const fileText = await res.data.text();

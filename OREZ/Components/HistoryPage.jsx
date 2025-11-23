@@ -77,6 +77,31 @@ export default function HistoryPage({ repo, user, onBack }) {
     setCurrentFiles(snapshotFiles.filter((e) => e.tree_id === newTreeId));
     setCurrentPath(newPath);
   };
+  // Function to handle the rollback button click
+  const handleRollback = async (commitId, e) => {
+    e.stopPropagation(); // Stop the click from opening the "Browse" view
+    
+    if (!window.confirm("Are you sure you want to revert to this version? This will create a new commit.")) {
+      return;
+    }
+
+    try {
+      await axios.post(`http://localhost:3001/api/repos/${repo.repo_id}/rollback/${commitId}`, {
+        user_id: user.user_id
+      });
+      
+      alert("Restored successfully! A new commit has been created.");
+      
+      // Refresh the list to see the new commit immediately
+      const res = await axios.get(`http://localhost:3001/api/repos/${repo.repo_id}/commits`);
+      setCommits(res.data);
+      
+    } catch (err) {
+      console.error(err);
+      alert("Failed to rollback");
+    }
+  };
+
   return (
     <div className="repo-page">
         <button className="btn primary back" onClick={view === 'list' ? onBack : () => setView('list')}>
@@ -108,6 +133,7 @@ export default function HistoryPage({ repo, user, onBack }) {
                 <th style={{ padding: '10px', textAlign: 'left' }}>Message</th>
                 <th style={{ padding: '10px', textAlign: 'left' }}>Author</th>
                 <th style={{ padding: '10px', textAlign: 'left' }}>Date</th>
+                <th style={{ padding: '10px', textAlign: 'right' }}>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -120,6 +146,17 @@ export default function HistoryPage({ repo, user, onBack }) {
                 <td style={{ padding: '10px', color: 'var(--accent-2)' }}>{commit.message}</td>
                 <td style={{ padding: '10px' }}>{commit.user_name}</td>
                 <td style={{ padding: '10px' }}>{new Date(commit.created_at).toLocaleString()}</td>
+
+                <td style={{ padding: '10px', textAlign: 'right' }}>
+                    <button 
+                    className="btn ghost" 
+                    style={{ fontSize: '12px', padding: '5px 10px', border: '1px solid #555' }}
+                    onClick={(e) => handleRollback(commit.commit_id, e)}
+                    >
+                    Restore
+                    </button>
+                </td>
+                
                 </tr>
             ))}
             </tbody>
