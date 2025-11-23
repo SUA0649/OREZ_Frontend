@@ -1,59 +1,537 @@
+/* RepoDashboard.css: Complete Dark, Glowing Theme (The definitive Header Fix) */
+
+:root {
+  /* Core Theme Colors (Adjusted slightly for better contrast) */
+  --color-primary: #a367ff; /* Purple/Indigo */
+  --color-secondary: #00c6ff; /* Bright Blue */
+  --color-dark-bg: #111317; /* Very dark background */
+  --color-panel-bg: #1c1f26; /* Dark panel background */
+  --color-text-light: #e6eef8; /* Light text for readability */
+  --color-muted: #9aa0b4; /* Muted text */
+  /* Glow Effects */
+  --color-glow-dark: rgba(163, 103, 255, 0.4);
+  --color-glow-light: rgba(0, 198, 255, 0.4);
+}
+
+/* --- Base Fixes --- */
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-dark-bg);
+  min-height: 100vh;
+}
+
 .dashboard {
-  padding: 20px 40px;
+  padding: 0;
+  background-color: var(--color-dark-bg);
+  color: var(--color-text-light);
 }
 
-.welcome {
-  text-align: center;
-  font-size: 2rem;
-  color: #a367ff;
-  margin-bottom: 30px;
-}
 
-.repo-panels {
+/* --- 1. Dashboard Header (.dash-header) --- */
+.dash-header {
+  /* FIX: Use flex-start and let auto margins handle spacing */
   display: flex;
-  gap: 20px;
-  justify-content: space-between;
+  justify-content: flex-start; 
+  align-items: center;
+  padding: 20px 40px;
+  margin-bottom: 20px;
+  background-color: #1a1e26;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.panel {
-  flex: 1;
-  background: #1c1f26;
+/* Container for the welcome message (Left side) */
+.header-welcome {
+    /* No flex-basis needed, just let it take its content width */
+    flex-shrink: 0; 
+}
+
+/* Container for the OREZ brand (Center) */
+.header-center {
+  /* Pushes the center element to the middle, regardless of side width */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  flex-grow: 0; /* Prevents it from consuming all space */
+  transform: translateX(0%); /* Reset any previous transform attempts */
+}
+
+/* Container for the Sign Out button (Right side) */
+.header-actions {
+    /* Pushes the element to the far right after auto-centering is done */
+    margin-left: auto; 
+    flex-shrink: 0;
+    text-align: right; /* Ensure the button within is aligned right */
+}
+
+
+.brand-xl {
+  /* OREZ Title - Glowing Design */
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: var(--color-primary);
+  text-shadow: 0 0 10px var(--color-primary),
+    0 0 20px var(--color-primary),
+    0 0 30px var(--color-secondary);
+  transition: color 0.3s, text-shadow 0.3s;
+  margin: 0; 
+}
+
+.subtitle {
+  /* Welcome "Username" style update */
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: var(--color-muted);
+  padding: 0;
+}
+
+/* User name glow/gradient - MADE FONT BIGGER */
+.subtitle strong {
+  font-size: 1.6rem; /* Bigger font size than the surrounding subtitle text */
+  margin-right: 5px;
+  background: linear-gradient(90deg, #00c6ff 10%, #a367ff 50%, var(--color-text-light) 90%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 6px rgba(163, 103, 255, 0.5);
+  font-weight: 700;
+}
+
+.btn.ghost {
+  border: 1px solid var(--color-secondary);
+  color: var(--color-secondary);
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1; 
+}
+
+.btn.ghost:hover {
+  background: var(--color-secondary);
+  color: #081018; /* Black text on bright button */
+  box-shadow: 0 0 10px var(--color-secondary);
+}
+
+
+/* --- 2. Stats at a Glance (.stats-card) --- */
+.stats-card {
+  padding: 25px 40px;
+  margin: 0 40px 30px;
+  background: var(--color-panel-bg);
   border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 0 20px rgba(163, 103, 255, 0.4);
+  box-shadow: 0 0 15px var(--color-glow-dark);
 }
 
-h3 {
-  color: #00c6ff;
-  margin-bottom: 15px;
+.stats-title {
+  color: var(--color-secondary);
+  margin: 0 0 15px;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
   border-bottom: 1px solid #444;
-  padding-bottom: 5px;
+  padding-bottom: 8px;
 }
 
-.repo-box {
+.stats-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 30px;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+  padding: 15px;
+  border-right: 1px solid #333;
+}
+
+.stat-item:last-child {
+  border-right: none;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  /* Gradient text: Blue to Purple */
+  background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+/* --- 3. Create Repository Row (.create-row) --- */
+.create-row {
+  display: flex;
+  justify-content: center; /* Center the button */
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 0 40px;
+}
+
+.field {
+  background: #0e1116;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  color: var(--color-text-light);
+}
+
+.field.small {
+  width: 250px;
+}
+
+/* BIGGER ACCENT BUTTON & ENHANCED HOVER EFFECT */
+.btn.accent {
+  display: flex;
+  align-items: center;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  /* Primary color is now a strong blue/purple blend */
+  background: linear-gradient(90deg, var(--color-secondary), var(--color-primary));
+  color: #081018; /* FIX: Black text for contrast */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 198, 255, 0.4);
+}
+
+.btn.accent:hover {
+  transform: scale(1.1); /* Slightly more prominent scale */
+  box-shadow: 0 0 30px var(--color-primary),
+    0 0 50px var(--color-secondary);
+}
+
+.err {
+  background: #2a0b0b;
+  padding: 8px;
+  border-radius: 8px;
+  color: #ffcccc;
+  font-size: 0.9rem;
+}
+
+
+/* --- 4. Panels and Activity Layout (.panels-and-activity) --- */
+.panels-and-activity {
+  display: flex;
+  gap: 30px;
+  padding: 0 40px 40px;
+  flex-wrap: wrap;
+}
+
+/* Container for the two repo panels */
+.panels {
+  display: flex;
+  flex: 2; /* Takes two units of space (e.g., 2/3 width) */
+  gap: 30px;
+}
+
+/* Individual Repo Panels */
+.panels .panel {
+  flex: 1; /* Each repo panel takes half of the .panels space */
+  padding: 25px;
+  background: var(--color-panel-bg);
+  border-radius: 15px;
+  box-shadow: 0 0 20px var(--color-glow-dark);
+  min-height: 300px;
+}
+
+.panel-title {
+  color: var(--color-secondary);
+  margin: 0 0 15px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 8px;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+}
+
+
+/* --- 5. Repo Card Styles --- */
+.repo-card {
   background: #2a2f3a;
   border-radius: 10px;
   padding: 15px;
   margin-bottom: 10px;
-  transition: transform 0.2s;
+  cursor: pointer;
+  border-left: 5px solid transparent;
+  transition: transform 0.2s, box-shadow 0.2s, border-left-color 0.2s;
+  position: relative;
 }
 
-.repo-box:hover {
+.repo-card:hover {
   transform: scale(1.02);
-  box-shadow: 0 0 15px #a367ff;
+  box-shadow: 0 0 15px var(--color-primary);
+  border-left-color: var(--color-primary);
 }
 
-.repo-box h4 {
+.repo-title {
   margin: 0 0 5px 0;
-  color: #a367ff;
+  color: var(--color-primary);
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
-.repo-box p {
+.repo-sub {
   margin: 0;
-  color: #ccc;
+  color: var(--color-muted);
+  font-size: 0.9rem;
 }
 
-.empty-msg {
+.tag {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.owner-tag {
+  background: var(--color-primary);
+  color: #081018; /* Black text */
+  box-shadow: 0 0 5px var(--color-primary);
+}
+
+.part-tag {
+  background: var(--color-secondary);
+  color: #081018; /* Black text */
+  box-shadow: 0 0 5px var(--color-secondary);
+}
+
+.empty {
   color: #888;
   font-style: italic;
+  padding: 10px;
+  text-align: center;
+}
+
+
+/* --- 6. Activity Feed Styling --- */
+.activity-feed {
+  flex: 1; /* Takes one unit of space (e.g., 1/3 width) */
+  background: var(--color-panel-bg);
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 0 20px rgba(0, 198, 255, 0.2); /* Subtle blue glow for activity */
+  min-height: 300px;
+}
+
+.activity-title {
+  color: var(--color-primary);
+  margin: 0 0 15px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 8px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.commit-item {
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #2a2f3a;
+  border-radius: 8px;
+  border-left: 3px solid var(--color-secondary);
+  transition: background 0.2s;
+}
+
+.commit-item:hover {
+  background: #3a4050;
+  box-shadow: 0 0 5px var(--color-secondary);
+}
+
+.commit-message {
+  font-weight: bold;
+  color: var(--color-text-light);
+  margin-bottom: 4px;
+  font-size: 0.95rem;
+}
+
+.commit-details {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.commit-repo {
+  color: var(--color-secondary);
+  font-weight: 500;
+}
+
+.commit-author {
+  color: var(--color-primary);
+}
+
+
+/* --- 7. Modal/Pop-up Styles (Kept for completeness and updated for inputs) --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: var(--color-panel-bg);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 30px var(--color-primary), 0 0 50px var(--color-secondary);
+  width: 400px;
+  max-width: 90%;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-content h3 {
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-secondary);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+}
+
+.modal-content .field {
+  width: 100%;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn.cancel {
+  background: #333;
+  color: var(--color-text-light);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modal-actions .btn.primary {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: linear-gradient(90deg, var(--color-secondary), var(--color-primary));
+  color: #081018;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-actions .btn.primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px var(--color-primary);
+}
+
+
+/* --- 8. Responsive Adjustments --- */
+@media (max-width: 1100px) {
+  .panels-and-activity {
+    flex-direction: column; /* Stack repo panels and activity feed */
+  }
+
+  .panels {
+    flex-direction: column; /* Stack the two repo panels */
+  }
+
+  .panels,
+  .activity-feed,
+  .panels .panel {
+    flex: none;
+    width: 100%;
+  }
+
+  .stats-row {
+    flex-direction: column;
+  }
+
+  .stat-item {
+    border-right: none;
+    border-bottom: 1px solid #333;
+  }
+
+  .stat-item:last-child {
+    border-bottom: none;
+  }
+  
+  /* Responsive header adjustments for smaller screens */
+  .dash-header {
+      /* Revert to single-column stacking for mobile */
+      flex-direction: column;
+      align-items: center;
+      padding: 15px 20px;
+      position: static;
+  }
+  
+  .header-welcome,
+  .header-center,
+  .header-actions {
+      /* Reset auto margins for mobile stacking */
+      margin: 5px 0;
+      flex-basis: 100%;
+      text-align: center;
+      width: 100%;
+      margin: 5px 0;
+  }
+  
+  .header-welcome {
+      order: 2; /* Move welcome message below the brand */
+  }
+  
+  .header-center {
+      order: 1; /* Brand on top */
+  }
+  
+  .header-actions {
+      order: 3; /* Sign Out button last */
+      text-align: center; /* Center button on mobile */
+  }
+
+  .dash-header,
+  .stats-card,
+  .create-row,
+  .panels-and-activity {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }

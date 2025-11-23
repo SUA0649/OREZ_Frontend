@@ -12,8 +12,10 @@
   "dependencies": {
     "axios": "^1.13.2",
     "file-saver": "^2.0.5",
+    "gsap": "^3.13.0",
     "jszip": "^3.10.1",
     "jzip": "^1.0.0",
+    "lucide-react": "^0.554.0",
     "react": "^19.1.1",
     "react-diff-viewer-continued": "^3.4.0",
     "react-dom": "^19.1.1"

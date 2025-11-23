@@ -131,3 +131,199 @@
 .file {
   margin-left: 12px;
 }
+
+
+/* --- TRANSITION LOADER & SCREEN WIPE STYLES --- */
+
+/* Animation Keyframes */
+@keyframes delay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.05);
+    -webkit-transform: scaleY(0.05);
+  }  
+  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+
+/* Screen Wipe Pseudo-Elements */
+body:before,
+body:after{
+  content: '';
+  height: 50vh;
+  width:100%;
+  position:fixed;
+  left:0;
+  /* Using the color from your example, though you may want to align this to your existing dark theme colors */
+  background: #1c2020; 
+  z-index: 1000;
+}
+
+body:before{
+  top: 0;
+  /* Initial state: off-screen */
+  transform: translateY(-100%); 
+}
+body:after{
+  bottom: 0;
+  /* Initial state: off-screen */
+  transform: translateY(100%);
+}
+
+/* Loader Styles */
+.loader {
+  margin: 0 auto;
+  width: 60px;
+  height: 50px;
+  text-align: center;
+  font-size: 10px;
+  position: fixed; 
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  z-index: 1001; /* Must be above the screen wipe */
+  opacity: 0; /* Initial state: hidden */
+}
+
+.loader > div {
+  height: 100%;
+  width: 8px;
+  display: inline-block;
+  float: left;
+  margin-left: 2px;
+  animation: delay 0.8s infinite ease-in-out;
+}
+
+.loader .bar1{
+  background-color: #754fa0 ;
+}
+.loader .bar2{
+  background-color: #09b7bf;
+  animation-delay: -0.7s;
+}
+.loader .bar3{
+  background-color: #90d36b;
+  animation-delay: -0.6s;
+}
+.loader .bar4{
+  background-color: #f2d40d;
+  animation-delay: -0.5s;
+}
+.loader .bar5{
+  background-color: #fcb12b;
+  animation-delay: -0.4s;
+}
+.loader .bar6{
+  background-color: #ed1b72;
+  animation-delay: -0.3s;
+}
+
+/* ... (existing app.css content) ... */
+
+/* --- PERMISSION MODAL STYLES --- */
+.permission-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+  backdrop-filter: blur(8px); /* The requested blur effect */
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.permission-modal-content {
+  background: rgba(20, 20, 40, 0.95);
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  transform: scale(0.95);
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-title {
+  margin-top: 0;
+  color: var(--accent);
+  text-align: center;
+}
+
+.modal-subtext {
+  color: var(--muted);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.permission-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.permission-btn {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  transition: all 0.2s;
+  /* Use a subtle border for visual separation */
+  border-left: 3px solid rgba(255,255,255,0.1); 
+}
+
+.permission-btn:hover {
+  background: rgba(123, 92, 255, 0.1);
+  transform: translateX(4px);
+}
+
+.perm-name {
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.perm-desc {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.permission-btn.owner-perm {
+  border-left-color: var(--accent); /* Purple for Owner */
+}
+
+.permission-btn.contributor-perm {
+  border-left-color: var(--accent-2); /* Blue for Contributor */
+}
+
+/* NEW: Download Repo Button Tag (Slightly larger) */
+.btn.download-repo {
+  /* Larger size (less smaller) than the default 8px 12px padding */
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  /* Keep the same design (accent gradient) */
+  background: linear-gradient(90deg, #00c6ff, #6c63ff);
+  color: #061018;
+  /* Retain the aesthetic shadow */
+  box-shadow: 0 4px 12px rgba(0,198,255,0.4);
+  cursor: pointer;
+  border: none;
+}
