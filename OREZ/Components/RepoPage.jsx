@@ -125,6 +125,37 @@ export default function RepoPage({ repo, user, onBack, onShowHistory }) {
     }
   };
 
+// Function to handle the deletion request
+    const handleDelete = async (node) => {
+        // Construct the full path to the item to be deleted
+        // currentPath is an array of parent folder names, e.g., ['src', 'components']
+        const basePath = currentPath.join('/');
+        const pathToDelete = basePath ? `${basePath}/${node.name}` : node.name;
+        
+        const commitMessage = `Delete ${node.mode === 'tree' ? 'folder' : 'file'}: ${pathToDelete}`;
+
+        if (!window.confirm(`Are you sure you want to delete '${pathToDelete}'? This will create a new commit.`)) {
+            return;
+        }
+
+        try {
+            // Call the new backend endpoint
+            await axios.post(`http://localhost:3001/api/repos/${repo.repo_id}/delete-item`, {
+                path: pathToDelete,
+                message: commitMessage,
+            });
+
+            // Success: Re-fetch files to update the tree display
+            await fetchUsersAndFiles();
+            setError("");
+            setMessage(`✅ Successfully committed: ${commitMessage}`);
+        } catch (err) {
+            console.error("Error deleting item:", err);
+            setError(err.response?.data?.error || "Failed to delete item.");
+            setMessage("");
+        }
+    };
+
   const handleDrop = async (e) => {
     e.preventDefault();
     setDragActive(false);
@@ -263,11 +294,12 @@ export default function RepoPage({ repo, user, onBack, onShowHistory }) {
             >
                 {/* File List */}
                 <div style={{ marginBottom: '20px' }}>
-                    <FileTree 
-                        tree={currentFiles} 
-                        onClickFolder={openFolder} 
-                        onClickFile={(node) => setSelectedFile({...node.blob, name: node.name})} 
-                    />
+                    <FileTree
+                        tree={currentFiles}
+                        onClickFolder={openFolder}
+                        onClickFile={(node) => setSelectedFile({ ...node.blob, name: node.name })}
+                        onDelete={handleDelete}
+                      />
                     {currentFiles.length === 0 && <div className="empty" style={{marginTop:'50px'}}>This folder is empty.</div>}
                 </div>
             </div>
