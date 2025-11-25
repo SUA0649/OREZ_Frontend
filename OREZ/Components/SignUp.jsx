@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-export default function SignIn({ onSignIn }){
+export default function SignUp({ onSignUp }){
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -10,8 +10,8 @@ export default function SignIn({ onSignIn }){
     e?.preventDefault()
     setError('')
     try{
-      const res = await axios.post('http://localhost:3001/api/signin', { user_name: userName, password })
-      onSignIn(res.data)
+      const res = await axios.post('http://localhost:3001/api/signup', { user_name: userName, password })
+      onSignUp(res.data)
     }catch(err){
       setError(err.response?.data?.error || 'Sign Up failed')
     }

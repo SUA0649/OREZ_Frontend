@@ -6,6 +6,8 @@ import FilePreviewModal from './FilePreviewModal';
 import DiffModal from './DiffModal';
 
 export default function HistoryPage({ repo, user, onBack }) {
+  const amOwner = repo.permission === 'Owner';
+  const amContributor = repo.permission === 'Contributor';
   const [commits, setCommits] = useState([]);
   const [error, setError] = useState('');
   const [view, setView] = useState('list'); 
@@ -180,6 +182,8 @@ export default function HistoryPage({ repo, user, onBack }) {
                         <div style={{fontSize:'0.9rem', color:'#888'}}>{new Date(commit.created_at).toLocaleDateString()}</div>
                         
                         <div style={{ display: 'flex', gap: '10px', justifyContent:'flex-end' }}>
+                            
+                            {/* 1. COMPARE BUTTON*/}
                             <button 
                                 className="btn ghost" 
                                 style={{padding:'6px 12px', fontSize:'0.8rem'}}
@@ -187,13 +191,38 @@ export default function HistoryPage({ repo, user, onBack }) {
                             >
                                 <GitCompare size={14}/> Compare
                             </button>
-                            <button 
-                                className="btn primary" 
-                                style={{ background: '#f44336', boxShadow:'none', padding:'6px 12px', fontSize:'0.8rem', border:'none' }}
-                                onClick={(e) => handleRollback(commit.commit_id, e)}
-                            >
-                                <RotateCcw size={14}/> Restore
-                            </button>
+                            
+                            {/* 2. RESTORE BUTTON*/}
+                            {amOwner && (
+                                <button 
+                                    className="btn primary" 
+                                    style={{ background: '#f44336', boxShadow:'none', padding:'6px 12px', fontSize:'0.8rem', border:'none' }}
+                                    onClick={(e) => handleRollback(commit.commit_id, e)}
+                                >
+                                    <RotateCcw size={14}/> Restore
+                                </button>
+                            )}
+
+                            {/* 3. REQUEST BUTTON*/}
+                            {amContributor && (
+                                <button 
+                                    className="btn ghost" 
+                                    style={{ borderColor: '#f44336', color:'#f44336', padding:'6px 12px', fontSize:'0.8rem' }}
+                                    onClick={async (e) => {
+                                        e.stopPropagation();
+                                        if(!window.confirm("Request rollback to this version?")) return;
+                                        try {
+                                            await axios.post(`http://localhost:3001/api/repos/${repo.repo_id}/rollback-request`, {
+                                                user_id: user.user_id,
+                                                commit_id: commit.commit_id
+                                            });
+                                            alert("Request sent to Owner.");
+                                        } catch(err) { alert("Failed to send request"); }
+                                    }}
+                                >
+                                    <Clock size={14}/> Request
+                                </button>
+                            )}
                         </div>
                     </div>
                 ))}

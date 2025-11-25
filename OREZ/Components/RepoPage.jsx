@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { saveAs } from "file-saver";
-import { Folder, File, Upload, Download, Clock, ArrowLeft, Search, UserPlus, Shield, LogOut } from 'lucide-react';
+import { Folder, File, Upload, Download, Clock, ArrowLeft, Search, UserPlus, Shield, LogOut, RotateCcw } from 'lucide-react';
 import FileTree from './FileTree';
 import FilePreviewModal from './FilePreviewModal';
 
 export default function RepoPage({ repo, user, onBack, onShowHistory }) {
+  const [requests, setRequests] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [linked, setLinked] = useState([]);
   const [search, setSearch] = useState("");
@@ -39,6 +40,14 @@ export default function RepoPage({ repo, user, onBack, onShowHistory }) {
       // Show root folder contents
       setCurrentFiles(entries.filter((e) => e.tree_id === rootTreeId));
       setCurrentPath([]);
+      
+      const myPerm = collRes.data.find(u => u.user_id === user.user_id)?.permission;
+      if (myPerm === 'Owner') {
+          try {
+             const reqRes = await axios.get(`http://localhost:3001/api/repos/${repo.repo_id}/rollback-requests`);
+             setRequests(reqRes.data);
+          } catch(e) { console.error("Failed to load requests", e); }
+        }
     } catch (err) {
       console.error(err.response?.data || err.message);
       setError("Failed to load users/files");
@@ -179,6 +188,20 @@ export default function RepoPage({ repo, user, onBack, onShowHistory }) {
     setShowPermissionModal(true);
   };
 
+  const handleRequestAction = async (requestId, action) => {
+    try {
+        await axios.post(`http://localhost:3001/api/repos/${repo.repo_id}/rollback-requests/${requestId}`, {
+            action,
+            owner_id: user.user_id
+        });
+        // Refresh data to remove the processed request
+        fetchUsersAndFiles(); 
+        alert(action === 'approve' ? "Rollback Approved & Executed!" : "Request Rejected");
+    } catch (err) {
+        alert("Action failed: " + (err.response?.data?.error || err.message));
+    }
+  };
+
   return (
     <div className="dashboard" style={{ padding: '40px' }}>
       
@@ -275,7 +298,39 @@ export default function RepoPage({ repo, user, onBack, onShowHistory }) {
 
         {/* --- RIGHT COLUMN: MEMBERS --- */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            
+            {amOwner && requests.length > 0 && (
+                <div className="glass-panel" style={{ padding: '20px', border: '1px solid #f44336', boxShadow:'0 0 15px rgba(244, 67, 54, 0.2)' }}>
+                    <h3 className="panel-title" style={{ fontSize: '1.2rem', color:'#f44336', display:'flex', alignItems:'center', gap:'8px' }}>
+                        <RotateCcw size={18}/> Pending Requests
+                    </h3>
+                    {requests.map(req => (
+                        <div key={req.request_id} style={{marginBottom:'15px', background:'rgba(0,0,0,0.2)', padding:'10px', borderRadius:'8px'}}>
+                            <div style={{fontSize:'0.9rem', marginBottom:'5px'}}>
+                                <span style={{fontWeight:'bold', color:'var(--color-primary)'}}>{req.user_name}</span> wants to revert to:
+                            </div>
+                            <div style={{fontSize:'0.8rem', color:'#888', fontStyle:'italic', marginBottom:'10px'}}>
+                                "{req.commit_message}"
+                            </div>
+                            <div style={{display:'flex', gap:'10px'}}>
+                                <button 
+                                    className="btn primary" 
+                                    style={{padding:'5px 10px', fontSize:'0.8rem', flex:1}} 
+                                    onClick={() => handleRequestAction(req.request_id, 'approve')}
+                                >
+                                    Approve
+                                </button>
+                                <button 
+                                    className="btn cancel" 
+                                    style={{padding:'5px 10px', fontSize:'0.8rem', flex:1}} 
+                                    onClick={() => handleRequestAction(req.request_id, 'reject')}
+                                >
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
             {/* Member List */}
             <div className="glass-panel" style={{ padding: '20px' }}>
                 <h3 className="panel-title" style={{ fontSize: '1.2rem', display:'flex', alignItems:'center', gap:'8px' }}>
