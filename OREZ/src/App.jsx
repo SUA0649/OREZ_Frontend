@@ -4,7 +4,8 @@ import SignUp from '../Components/SignUp'
 import RepoDashboard from '../Components/RepoDashboard'
 import RepoPage from '../Components/RepoPage'
 import HistoryPage from '../Components/HistoryPage'
-import { User, UserPlus } from 'lucide-react' // Make sure you have lucide-react installed
+import AnalyticsPage from '../Components/AnalyticsPage'
+import { User, UserPlus } from 'lucide-react'
 
 export default function App() {
   const [user, setUser] = useState(null)
@@ -70,8 +71,9 @@ export default function App() {
     )
   }
 
-  // --- REPO PAGE ---
+  // --- REPO PAGE ROUTING ---
   if (selectedRepo) {
+    
     if (repoView === "history") {
       return (
         <HistoryPage
@@ -81,12 +83,24 @@ export default function App() {
         />
       );
     }
+
+    // --- NEW ANALYTICS ROUTE ---
+    if (repoView === "analytics") {
+      return (
+        <AnalyticsPage 
+          repo={selectedRepo} 
+          onBack={() => setRepoView("files")} 
+        />
+      );
+    }
+
     return (
       <RepoPage
         repo={selectedRepo}
         user={user}
         onBack={() => setSelectedRepo(null)}
         onShowHistory={() => setRepoView("history")}
+        onShowAnalytics={() => setRepoView("analytics")} // <-- Pass this new prop
       />
     )
   }

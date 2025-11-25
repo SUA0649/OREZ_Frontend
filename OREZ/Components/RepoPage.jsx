@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { saveAs } from "file-saver";
-import { Folder, File, Upload, Download, Clock, ArrowLeft, Search, UserPlus, Shield, LogOut, RotateCcw } from 'lucide-react';
+import { Folder, File, Upload, Download, Clock, ArrowLeft, Search, UserPlus, Shield, LogOut, RotateCcw, BarChart2 } from 'lucide-react';
 import FileTree from './FileTree';
 import FilePreviewModal from './FilePreviewModal';
 
-export default function RepoPage({ repo, user, onBack, onShowHistory }) {
+export default function RepoPage({ repo, user, onBack, onShowHistory, onShowAnalytics }) {
   const [requests, setRequests] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [linked, setLinked] = useState([]);
@@ -239,6 +239,9 @@ export default function RepoPage({ repo, user, onBack, onShowHistory }) {
                     )}
                 </div>
                 <div style={{ display: 'flex', gap: '10px' }}>
+                    <button className="btn ghost" onClick={onShowAnalytics}>
+                        <BarChart2 size={18}/> Analytics
+                    </button>
                     <button className="btn ghost" onClick={onShowHistory}>
                         <Clock size={18}/> History
                     </button>
