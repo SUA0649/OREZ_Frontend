@@ -5,6 +5,7 @@ import RepoDashboard from '../Components/RepoDashboard'
 import RepoPage from '../Components/RepoPage'
 import HistoryPage from '../Components/HistoryPage'
 import AnalyticsPage from '../Components/AnalyticsPage'
+import LandingPage from '../Components/Landing'
 import { User, UserPlus } from 'lucide-react'
 
 export default function App() {
@@ -12,13 +13,47 @@ export default function App() {
   const [selectedRepo, setSelectedRepo] = useState(null)
   const [authMode, setAuthMode] = useState("signin")
   const [repoView, setRepoView] = useState("files")
+  const [showLanding, setShowLanding] = useState(true)
 
-  // --- AUTH SCREEN (Redesigned) ---
+  // --- LANDING PAGE ---
+  if (showLanding) {
+    return <LandingPage onGetStarted={() => setShowLanding(false)} />
+  }
+
+  // --- AUTH SCREEN ---
   if (!user) {
     return (
       <div className="auth-container">
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
           
+          {/* Back to Landing Button */}
+          <button 
+            onClick={() => setShowLanding(true)}
+            style={{
+              position: 'absolute',
+              top: '20px',
+              left: '20px',
+              background: 'transparent',
+              border: '1px solid var(--color-muted)',
+              color: 'var(--color-muted)',
+              padding: '8px 16px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              transition: '0.3s'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.borderColor = 'var(--color-primary)'
+              e.target.style.color = 'var(--color-primary)'
+            }}
+            onMouseOut={(e) => {
+              e.target.style.borderColor = 'var(--color-muted)'
+              e.target.style.color = 'var(--color-muted)'
+            }}
+          >
+            ← Back
+          </button>
+
           {/* Brand Logo/Title */}
           <h1 className="brand-xl" style={{ fontSize: '3rem', marginBottom: '10px' }}>OREZ</h1>
 
@@ -84,7 +119,6 @@ export default function App() {
       );
     }
 
-    // --- NEW ANALYTICS ROUTE ---
     if (repoView === "analytics") {
       return (
         <AnalyticsPage 
@@ -100,7 +134,7 @@ export default function App() {
         user={user}
         onBack={() => setSelectedRepo(null)}
         onShowHistory={() => setRepoView("history")}
-        onShowAnalytics={() => setRepoView("analytics")} // <-- Pass this new prop
+        onShowAnalytics={() => setRepoView("analytics")}
       />
     )
   }
