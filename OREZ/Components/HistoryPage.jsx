@@ -33,8 +33,8 @@ export default function HistoryPage({ repo, user, onBack }) {
 
       // If filters exist, use the Search Endpoint. Otherwise, use standard list.
       const endpoint = (searchKeyword || startDate || endDate) 
-        ? `http://localhost:3001/api/repos/${repo.repo_id}/search-commits`
-        : `http://localhost:3001/api/repos/${repo.repo_id}/commits`;
+        ? `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/search-commits`
+        : `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/commits`;
 
       const res = await axios.get(endpoint, { params });
       setCommits(res.data);
@@ -54,7 +54,7 @@ export default function HistoryPage({ repo, user, onBack }) {
   // [OMITTED FOR BREVITY - PASTE YOUR EXISTING LOGIC FUNCTIONS HERE]
   const viewSnapshot = async (commit) => {
     try {
-      const res = await axios.get(`http://localhost:3001/api/repos/${repo.repo_id}/tree/${commit.tree_id}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/tree/${commit.tree_id}`);
       const entries = res.data.entries;
       setSnapshotFiles(entries);
       setCurrentFiles(entries.filter(e => e.tree_id === commit.tree_id));
@@ -91,7 +91,7 @@ export default function HistoryPage({ repo, user, onBack }) {
     e.stopPropagation();
     if (!window.confirm("Revert to this version?")) return;
     try {
-      await axios.post(`http://localhost:3001/api/repos/${repo.repo_id}/rollback/${commitId}`, { user_id: user.user_id });
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/rollback/${commitId}`, { user_id: user.user_id });
       alert("Restored successfully!");
       fetchCommits(); // Refresh list
     } catch (err) { alert("Failed to rollback"); }
@@ -212,7 +212,7 @@ export default function HistoryPage({ repo, user, onBack }) {
                                         e.stopPropagation();
                                         if(!window.confirm("Request rollback to this version?")) return;
                                         try {
-                                            await axios.post(`http://localhost:3001/api/repos/${repo.repo_id}/rollback-request`, {
+                                            await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/rollback-request`, {
                                                 user_id: user.user_id,
                                                 commit_id: commit.commit_id
                                             });

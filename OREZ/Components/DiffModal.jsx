@@ -12,7 +12,7 @@ export default function DiffModal({ repoId, commitId, onClose }) {
   const [fileType, setFileType] = useState('text'); // 'text' or 'binary'
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/api/repos/${repoId}/diff/${commitId}`)
+    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repoId}/diff/${commitId}`)
       .then(res => setChanges(res.data.changes))
       .catch(err => console.error(err));
   }, [repoId, commitId]);
@@ -38,11 +38,11 @@ export default function DiffModal({ repoId, commitId, onClose }) {
     try {
       // 2. Fetch Text Content Only
       if (change.oldHash) {
-        const res = await axios.get(`http://localhost:3001/api/repos/${repoId}/blob/${change.oldHash}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repoId}/blob/${change.oldHash}`);
         setOldCode(typeof res.data === 'string' ? res.data : JSON.stringify(res.data, null, 2));
       }
       if (change.newHash) {
-        const res = await axios.get(`http://localhost:3001/api/repos/${repoId}/blob/${change.newHash}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repoId}/blob/${change.newHash}`);
         setNewCode(typeof res.data === 'string' ? res.data : JSON.stringify(res.data, null, 2));
       }
     } catch (err) {

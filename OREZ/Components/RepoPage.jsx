@@ -24,9 +24,9 @@ export default function RepoPage({ repo, user, onBack, onShowHistory, onShowAnal
   const fetchUsersAndFiles = async () => {
     try {
       const [ures, collRes, fileRes] = await Promise.all([
-        axios.get("http://localhost:3001/api/users"),
-        axios.get(`http://localhost:3001/api/repos/${repo.repo_id}/collaborators`),
-        axios.get(`http://localhost:3001/api/repos/${repo.repo_id}/files`),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/users`),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/collaborators`),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/files`),
       ]);
 
       setAllUsers(ures.data);
@@ -44,7 +44,7 @@ export default function RepoPage({ repo, user, onBack, onShowHistory, onShowAnal
       const myPerm = collRes.data.find(u => u.user_id === user.user_id)?.permission;
       if (myPerm === 'Owner') {
           try {
-             const reqRes = await axios.get(`http://localhost:3001/api/repos/${repo.repo_id}/rollback-requests`);
+             const reqRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/rollback-requests`);
              setRequests(reqRes.data);
           } catch(e) { console.error("Failed to load requests", e); }
         }
@@ -114,7 +114,7 @@ export default function RepoPage({ repo, user, onBack, onShowHistory, onShowAnal
 
     try {
       await axios.post(
-        `http://localhost:3001/api/repos/${repo.repo_id}/upload-folder`,
+        `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/upload-folder`,
         form,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -140,7 +140,7 @@ export default function RepoPage({ repo, user, onBack, onShowHistory, onShowAnal
 
         try {
             // Call the new backend endpoint
-            await axios.post(`http://localhost:3001/api/repos/${repo.repo_id}/delete-item`, {
+            await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/delete-item`, {
                 path: pathToDelete,
                 message: commitMessage,
             });
@@ -182,7 +182,7 @@ export default function RepoPage({ repo, user, onBack, onShowHistory, onShowAnal
       setMessage("Starting compression in background...");
       // 1. Trigger the background job (changed to POST)
       const startRes = await axios.post(
-        `http://localhost:3001/api/repos/${repo.repo_id}/download`
+        `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/download`
       );
       
       const jobId = startRes.data.job_id;
@@ -190,13 +190,13 @@ export default function RepoPage({ repo, user, onBack, onShowHistory, onShowAnal
       // 2. Poll for status
       const pollInterval = setInterval(async () => {
         try {
-          const pollRes = await axios.get(`http://localhost:3001/api/jobs/${jobId}`);
+          const pollRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/jobs/${jobId}`);
           
           if (pollRes.data.status === 'completed') {
             clearInterval(pollInterval);
             setMessage("Download ready!");
             // 3. Fetch the actual zip file
-            const zipRes = await axios.get(`http://localhost:3001/api/jobs/${jobId}/download`, { responseType: 'blob' });
+            const zipRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/jobs/${jobId}/download`, { responseType: 'blob' });
             saveAs(zipRes.data, `${repo.name}.zip`);
             setTimeout(() => setMessage(""), 3000);
           } else if (pollRes.data.status === 'failed') {
@@ -231,7 +231,7 @@ export default function RepoPage({ repo, user, onBack, onShowHistory, onShowAnal
 
     try {
       await axios.post(
-        `http://localhost:3001/api/repos/${repo.repo_id}/collaborators`,
+        `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/collaborators`,
         { user_name: u.user_name, permission: permission }
       );
       fetchUsersAndFiles();
@@ -251,7 +251,7 @@ export default function RepoPage({ repo, user, onBack, onShowHistory, onShowAnal
 
   const handleRequestAction = async (requestId, action) => {
     try {
-        await axios.post(`http://localhost:3001/api/repos/${repo.repo_id}/rollback-requests/${requestId}`, {
+        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/rollback-requests/${requestId}`, {
             action,
             owner_id: user.user_id
         });

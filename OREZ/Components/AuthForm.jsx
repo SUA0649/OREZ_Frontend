@@ -10,7 +10,7 @@ export default function AuthForm({ onAuth }) {
     e.preventDefault();
     const endpoint = isSignUp ? 'signup' : 'signin';
     try {
-      const res = await axios.post(`http://localhost:3001/api/${endpoint}`, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/${endpoint}`, {
         user_name: userName,
         password
       });

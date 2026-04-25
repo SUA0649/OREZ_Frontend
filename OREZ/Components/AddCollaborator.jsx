@@ -14,7 +14,7 @@ export default function AddCollaborator({ repoId, onAdded }) {
         // --- BULK MODE (Uses TCL Savepoints) ---
         const users = searchUser.split(',').map(u => u.trim()).filter(u => u);
         
-        const res = await axios.post(`http://localhost:3001/api/repos/${repoId}/collaborators/bulk`, {
+        const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repoId}/collaborators/bulk`, {
           user_names: users,
           permission
         });
@@ -31,7 +31,7 @@ export default function AddCollaborator({ repoId, onAdded }) {
         
       } else {
         // --- SINGLE MODE (Uses Stored Procedure) ---
-        await axios.post(`http://localhost:3001/api/repos/${repoId}/collaborators`, {
+        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repoId}/collaborators`, {
           user_name: searchUser,
           permission
         });

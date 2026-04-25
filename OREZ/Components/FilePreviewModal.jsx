@@ -25,7 +25,7 @@ export default function FilePreviewModal({ repoId, blob, onClose }) {
             const isImage = imageExtensions.includes(extension);
             const isPdf = pdfExtensions.includes(extension);
 
-            const res = await axios.get(`http://localhost:3001/api/repos/${repoId}/blob/${blob.hash}`, { responseType: 'blob' });
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repoId}/blob/${blob.hash}`, { responseType: 'blob' });
 
             if (isImage) {
                 setType('image');

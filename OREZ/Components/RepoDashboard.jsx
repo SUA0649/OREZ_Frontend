@@ -92,8 +92,8 @@ export default function RepoDashboard({ user, onSelectRepo, onSignOut }) {
   const fetch = useCallback(async () => {
     try {
       const [reposRes, commitsRes] = await Promise.all([
-        axios.get(`http://localhost:3001/api/repos/${user.user_id}`),
-        axios.get(`http://localhost:3001/api/users/${user.user_id}/recent-commits`)
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${user.user_id}`),
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/users/${user.user_id}/recent-commits`)
       ])
       setRepos(reposRes.data || [])
       setRecentCommits(commitsRes.data || [])
@@ -116,7 +116,7 @@ export default function RepoDashboard({ user, onSelectRepo, onSignOut }) {
   const create = useCallback(async () => {
     if (!name || !desc) return setError('Please fill repository name & description')
     try {
-      await axios.post('http://localhost:3001/api/repos/create', { owner_id: user.user_id, name, description: desc })
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/create`, { owner_id: user.user_id, name, description: desc })
       closeCreateModal()
       fetch()
     } catch (err) {
@@ -150,7 +150,7 @@ export default function RepoDashboard({ user, onSelectRepo, onSignOut }) {
     setBusyDeleting(true)
     try {
       // call your DELETE endpoint exactly as in routes
-      await axios.delete(`http://localhost:3001/api/repos/${repoToDelete.repo_id}`)
+      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repoToDelete.repo_id}`)
       setShowDeleteModal(false)
       setRepoToDelete(null)
       // refresh list

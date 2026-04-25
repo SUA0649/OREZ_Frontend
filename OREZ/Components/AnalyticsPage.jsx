@@ -11,7 +11,7 @@ export default function AnalyticsPage({ repo, onBack }) {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/api/repos/${repo.repo_id}/analytics`)
+    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${repo.repo_id}/analytics`)
       .then(res => {
         
         // --- FIX 1: LINE GRAPH (Time of Day "Heartbeat") ---

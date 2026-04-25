@@ -10,7 +10,7 @@ export default function SignUp({ onSignUp }){
     e?.preventDefault()
     setError('')
     try{
-      const res = await axios.post('http://localhost:3001/api/signup', { user_name: userName, password })
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/signup`, { user_name: userName, password })
       onSignUp(res.data)
     }catch(err){
       setError(err.response?.data?.error || 'Sign Up failed')

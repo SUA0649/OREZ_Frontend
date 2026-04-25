@@ -15,7 +15,7 @@ export default function RepoList({ user }) {
 
   const fetchRepos = async () => {
     try {
-      const res = await axios.get(`http://localhost:3001/api/repos/${user.user_id}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${user.user_id}`);
       setRepos(res.data);
     } catch (err) {
       setError('Failed to fetch repositories');
@@ -24,7 +24,7 @@ export default function RepoList({ user }) {
 
   const handleCreateRepo = async () => {
     try {
-      const res = await axios.post('http://localhost:3001/api/repos/create', {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/create`, {
         name: newRepoName,
         description: newRepoDesc,
         owner_id: user.user_id
@@ -40,7 +40,7 @@ export default function RepoList({ user }) {
   const handleAddCollaborator = async () => {
     if (!selectedRepo) return;
     try {
-      await axios.post(`http://localhost:3001/api/repos/${selectedRepo.repo_id}/add-collaborator`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/repos/${selectedRepo.repo_id}/add-collaborator`, {
         user_name: collaboratorName,
         permission: 'Contributor'
       });
