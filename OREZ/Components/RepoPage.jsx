@@ -179,14 +179,44 @@ export default function RepoPage({ repo, user, onBack, onShowHistory, onShowAnal
 
   const downloadRepoZip = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:3001/api/repos/${repo.repo_id}/download`,
-        { responseType: "blob" } 
+      setMessage("Starting compression in background...");
+      // 1. Trigger the background job (changed to POST)
+      const startRes = await axios.post(
+        `http://localhost:3001/api/repos/${repo.repo_id}/download`
       );
-      saveAs(res.data, `${repo.name}.zip`);
+      
+      const jobId = startRes.data.job_id;
+      
+      // 2. Poll for status
+      const pollInterval = setInterval(async () => {
+        try {
+          const pollRes = await axios.get(`http://localhost:3001/api/jobs/${jobId}`);
+          
+          if (pollRes.data.status === 'completed') {
+            clearInterval(pollInterval);
+            setMessage("Download ready!");
+            // 3. Fetch the actual zip file
+            const zipRes = await axios.get(`http://localhost:3001/api/jobs/${jobId}/download`, { responseType: 'blob' });
+            saveAs(zipRes.data, `${repo.name}.zip`);
+            setTimeout(() => setMessage(""), 3000);
+          } else if (pollRes.data.status === 'failed') {
+            clearInterval(pollInterval);
+            setError("Background compression failed.");
+            setMessage("");
+          } else {
+            setMessage("Compressing repository... please wait.");
+          }
+        } catch (pollErr) {
+          clearInterval(pollInterval);
+          setError("Failed to check download status");
+          setMessage("");
+        }
+      }, 1000); // poll every 1 second
+
     } catch (err) {
       console.error(err);
-      setError("Failed to download repo");
+      setError("Failed to initiate download");
+      setMessage("");
     }
   };
 

@@ -280,7 +280,7 @@ export default function LandingPage({ onGetStarted }) {
           </div>
           <div style={styles.navLinks}>
             <a href="#features" style={styles.navLink}>Features</a>
-            <a href="#tech" style={styles.navLink}>Tech a Stack</a>
+            <a href="#tech" style={styles.navLink}>Tech  Stack</a>
             <a href="#why" style={styles.navLink}>Why</a>
             <button 
               onClick={() => window.open('https://github.com/yourusername/orez', '_blank')}
